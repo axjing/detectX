@@ -249,7 +249,7 @@ if __name__=="__main__":
 
     demo=gr.Interface(
     fn=inference_all,
-    inputs=[gr.Image(source="upload", label="In",type="filepath", format="",interactive=True)],
+    inputs=[gr.Image(source="upload", label="IN",type="filepath", format="",interactive=True)],
     outputs=[gr.Image(label="show"),gr.Label(label="Out")],
     css="footer {visibility: hidden}",
     )
