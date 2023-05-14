@@ -261,4 +261,4 @@ if __name__=="__main__":
     outputs=[gr.Image(label="show"),gr.Label(label="Out")],
     css="footer {visibility: hidden}",
     )
-    demo.launch(share=True)
+    demo.launch(share=False)
