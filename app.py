@@ -2,6 +2,7 @@ import os
 import argparse
 from yolov5.detect import run,check_requirements,print_args
 from pathlib import Path
+from PIL import Image
 import gradio as gr
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
@@ -162,13 +163,13 @@ def inference_all(
                         label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
                         print(label,c,conf.detach().cpu().item())
                         result_dict[label]=conf.detach().cpu().item()
-                        annotator.box_label(xyxy, label, color=colors(c, True))
+                        annotator.box_label(xyxy, label, color=colors(c, False))
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
 
             # Stream results
             im0 = annotator.result()
-            return im0,result_dict
+            return Image.fromarray(im0.astype('uint8')).convert('RGBA'),result_dict
             if view_img:
                 if platform.system() == 'Linux' and p not in windows:
                     windows.append(p)
@@ -250,7 +251,7 @@ if __name__=="__main__":
     demo=gr.Interface(
     fn=inference_all,
     inputs=[gr.Image(source="upload", label="IN",type="filepath", format="",interactive=True)],
-    outputs=[gr.Image(label="show"),gr.Label(label="Out")],
+    outputs=[gr.Image(label="show",type="pil"),gr.Label(label="Out")],
     css="footer {visibility: hidden}",
     )
     
